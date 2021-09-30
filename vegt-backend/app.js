@@ -2,15 +2,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const connectDB = require('./config/db');
+
+//loads VeggieTender config file
+const dotenv = require('dotenv');    
+dotenv.config({ path: './config/config.env'});
+//loads VeggieTender DB
+const connectDB = require('./config/db');  
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 
-//app is running on PORT 3000
+//app is running on PORT 5000
 var app = express();
+
 
 //Connect to Mongo VeggieTenderDB
 connectDB();
