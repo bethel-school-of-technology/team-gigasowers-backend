@@ -2,13 +2,11 @@ const User = require('../models/user');
 
 const loginHandler = (req, res, next) => {
 
-    let newUser = new User({
-        userName: req.body.userName,
-        password: req.body.password
-    });
+    console.log("from loginHandler, User Data:");
+    console.log(req.body);
 
     try {
-        User.findOne({ "userName": newUser.userName, "password": newUser.password })
+        User.findOne({ "userName": req.body.loginData.userName, "password": req.body.loginData.userPass })
             .exec(function (err, user) {
                 if (!user) {
                     console.log("User not found");
