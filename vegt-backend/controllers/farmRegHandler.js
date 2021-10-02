@@ -8,7 +8,7 @@ const farmRegHandler = (req, res, next) => {
         console.log(req.body);
         let newUserFarm = new User({
             farmName: req.body.farmName,
-            farmDescription: req.body.farmDescription,
+            farmDetails: req.body.farmDetails,
             farmAddress: req.body.farmAddress,
             farmCity: req.body.farmCity,
             farmState: req.body.farmState,
@@ -18,7 +18,7 @@ const farmRegHandler = (req, res, next) => {
             farmEmail: req.body.farmEmail,
         })
         console.log(newUserFarm);
-        let result = await newUserFarm.save();
+        let result = newUserFarm.save();
         console.log(result);
         res.send("Farm created");
 
