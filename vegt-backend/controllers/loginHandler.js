@@ -10,7 +10,6 @@ const loginHandler = (req, res, next) => {
             .exec(function (err, user) {
                 if (!user) {
                     console.log("User not found");
-                    console.log("err: " + err);
                     return res.status(404).json({ message: "Invalid User or Password" });
                 }
                 if (user.isDeleted) {
@@ -18,8 +17,7 @@ const loginHandler = (req, res, next) => {
                     return res.status(403).json({ message: "User account deleted" });
                 }
 
-                console.log(user.userName + " was found!");
-
+               
                 //Add Auth/JWT token code here in next sprint
                 // let passwordMatch = authService.comparePasswords(newUser.password, user.password);
                 // if (passwordMatch) {
@@ -27,11 +25,17 @@ const loginHandler = (req, res, next) => {
                 //     res.cookie('jwt', token); // <--- Adds token to response as a cookie
                 // } else {
                 //     console.log('Wrong password');
-                
+
                 // }
 
-                return res.status(200).json({ message: "User Found" });
-                
+                console.log(user.userName + " was found!");
+                return res.status(200).json(
+                    {
+                        message: "User Found",
+                        userName: user.userName,
+                        firstName: user.firstName
+                    });
+
             });
 
     } catch (err) {
