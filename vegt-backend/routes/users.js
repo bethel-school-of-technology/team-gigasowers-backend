@@ -6,6 +6,7 @@ var router = express.Router();
 const loginHandler = require('../controllers/loginHandler');
 const userRegHandler = require('../controllers/userRegHandler');
 const farmRegHandler = require('../controllers/farmRegHandler');
+const profileHandler = require('../controllers/profileHandler');
 
 
 
@@ -35,6 +36,14 @@ router.post('/farmRegister', async (req, res, next) => {
 
     //call farm registration handler 
     farmRegHandler(req, res, next);
+
+});
+
+//route to update profile info -> /update
+router.put('/update', async (req, res, next) => {
+
+    //call profile handler 
+    profileHandler(req, res, next);
 
 });
 
