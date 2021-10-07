@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     },
     likedFarms: [
         {
-            farmId: { type: Number },
+            farmId: { type: String },
             farmRating: { type: Number }
         }
     ],
@@ -40,20 +40,20 @@ const userSchema = new mongoose.Schema({
     },
     userFarms: [
         {
-            farmId: { type: Number, unique: true },
+            farmId: { type: String },
             farmName: { type: String },
             farmDescription: { type: String },
             farmAddress: { type: String },
             farmCity: { type: String },
             farmState: { type: String },
-            farmZip: { type: Number },
+            farmZip: { type: String },
             farmImage: { type: String },
             farmWebsite: { type: String },
             farmEmail: { type: String },
             farmInventory: [
                 {
-                    productId: { type: Number, unique: true },
-                    productCategory: [{ type: String }],
+                    productId: { type: String },
+                    productCategory: { type: String },
                     productName: { type: String },
                     productDescription: { type: String },
                     productQty:  { type: Number },
@@ -62,14 +62,14 @@ const userSchema = new mongoose.Schema({
             ],
             farmEvents: [
                 {
-                    eventId: { type: Number, unique: true },
+                    eventId: { type: String },
                     eventName: { type: String },
                     eventAddress: { type: String },
                     eventCity: { type: String },
                     eventState: { type: String },
-                    eventZip: { type: Number },
-                    eventStartDate:  { type: Date },
-                    eventFinishDate: { type: Date }
+                    eventZip: { type: String },
+                    eventStartDate:  { type: String },
+                    eventFinishDate: { type: String }
                 }
             ]    
         }

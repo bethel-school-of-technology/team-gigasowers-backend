@@ -7,8 +7,20 @@ const profileFilter = require('./profileFilter');
 ----------------------------------------------------------------*/
 const profileHandler = (req, res, next) => {
 
+    /*--Front end needs to pass in an object called profileData which contains
+        a property called "profileSection" which will indicate what data should
+        be returned to the frontend.  Values can be: "USER", "FARM", "ALL". If 
+        no value is entered or the property is missing, only a res.status code 
+        will be returned. See example below:
+            { "profileData": {
+                    "profileSection": "FARM",
+                    "isFarmer": true,
+                    "userFarms": [{x},{y}]
+                } 
+            }
+    */
     console.log("User data received via req.body.profileData: ");
-    console.log(req.body);  //front end needs to pass in an object called profileData
+    console.log(req.body); 
 
 
     //get user object from database before updating with incoming data
