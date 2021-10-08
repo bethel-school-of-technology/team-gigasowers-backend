@@ -7,7 +7,7 @@ const loginHandler = require('../controllers/loginHandler');
 const userRegHandler = require('../controllers/userRegHandler');
 const farmRegHandler = require('../controllers/farmRegHandler');
 const profileHandler = require('../controllers/profileHandler');
-
+const getProfileHandler = require('../controllers/getProfileHandler');
 
 
 /*------------------------------------
@@ -36,6 +36,12 @@ router.post('/farmRegister', async (req, res, next) => {
 router.put('/update', async (req, res, next) => {
     //call profile handler 
     profileHandler(req, res, next);
+});
+
+//route to get profile info -> /profile
+router.get('/profile', async (req, res, next) => {
+    //call profile handler 
+    getProfileHandler(req, res, next);
 });
 
 
