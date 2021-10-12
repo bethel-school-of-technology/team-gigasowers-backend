@@ -44,7 +44,6 @@ const profileFilter = (profileSection, profileObj) => {
 
     //helper function to filter and return farm info (along with user _id just in case it's needed)
     filterForFarmOnly = () => {
-        console.log("i maded it to the filterForFarmOnly function");
 
         if (profileObj._id) {
             filteredObj = { ...filteredObj, "_id": profileObj._id };

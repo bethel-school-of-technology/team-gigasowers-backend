@@ -3,29 +3,38 @@ const profileFilter = require('./profileFilter');
 
 
 /*---------------------------------------------------------------
- Handler function for PUT update profile route -> /update
+ Handler function for PUT update user profile route -> /update
 ----------------------------------------------------------------*/
 const profileHandler = (req, res, next) => {
 
     /*--Front end needs to pass in an object called profileData which contains
-        a property called "profileSection" which will indicate what data should
+        the profile data to be updated. In addition, a property called "profileSection" 
+        is available to utilize which will indicate what data should
         be returned to the frontend.  Values can be: "USER", "FARM", "ALL". If 
         no value is entered or the property is missing, only a res.status code 
         will be returned. See example below:
             { "profileData": {
-                    "profileSection": "FARM",
+                    "profileSection": "ALL",
+                    "userName": "new user name",
                     "isFarmer": true,
-                    "userFarms": [{x},{y}]
+                    etc...
                 } 
             }
     */
-    console.log("User data received via req.body.profileData: ");
-    console.log(req.body); 
+    //console.log("User data received via req.body.profileData: ");
+    //console.log(req.body);
+
+    //User was extracted from token and passed in via req.user property in order to findById()
+    const _id = req.user._id;
 
 
     //get user object from database before updating with incoming data
     try {
-        User.findOne({ "userName": req.body.profileData.userName },)
+        if (!req.body.profileData) {
+            return res.status(400).json({ message: "Invalid profileData Object" });
+        }
+
+        User.findOne({ "_id": _id },)
             .exec(function (err, foundObject) {
                 if (!foundObject) {
                     console.log("User not found");
@@ -36,9 +45,7 @@ const profileHandler = (req, res, next) => {
                     return res.status(403).json({ message: "User account deleted" });
                 }
 
-                console.log(foundObject.userName + " was found!");
-
-                //map received req.body.profileData into foundObject
+                //process received req.body.profileData into foundObject
                 loadProfileData(foundObject);
 
                 //save to the database will return an updated object
@@ -48,7 +55,6 @@ const profileHandler = (req, res, next) => {
                         res.status(500).send();
                     }
                     if (updatedObject) {
-                        console.log("updatedObject: " + updatedObject);
                         if (req.body.profileData.profileSection === "ALL") {
                             res.status(200).send(updatedObj);
                         } else {

@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const profileFilter = require('./profileFilter');
+const authService = require('../services/auth');
 
 
 /*------------------------------------------------------------------
@@ -17,11 +18,15 @@ const userRegHandler = async (req, res, next) => {
                 } 
             }
     */
-    console.log("User data received via req.body: ");
-    console.log(req.body);
+    //console.log("User data received via req.body: ");
+    //console.log(req.body);
 
     //will have to hash password before creating user in next sprint
     try {
+
+        if (!req.body.profileData) {
+            return res.status(400).json({ message: "Invalid profileData Object" });
+        }
 
         //create new user schema
         let newUser = new User({
@@ -29,7 +34,8 @@ const userRegHandler = async (req, res, next) => {
             lastName: req.body.profileData.lastName,
             email: req.body.profileData.email,
             userName: req.body.profileData.userName,
-            password: req.body.profileData.password,
+            password: authService.hashPassword(req.body.profileData.password),
+            isFarmer: req.body.profileData.isFarmer,
             likedFarms: [
                 {
                     farmId: "",
