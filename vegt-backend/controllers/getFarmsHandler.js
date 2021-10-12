@@ -11,7 +11,7 @@ const getFarmsHandler = (req, res, next) => {
 
     //get user object from database 
     try {
-        User.find({ "isDeleted": false }, projections)
+        User.find({ "isDeleted": false, "isFarmer": true }, projections)
             .exec(function (err, foundObject) {
                 if (!foundObject) {
                     console.log("Farms not found");
