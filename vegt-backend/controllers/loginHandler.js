@@ -1,40 +1,39 @@
 const User = require('../models/user');
+const authService = require('../services/auth');
 
 const loginHandler = (req, res, next) => {
 
-    console.log("from loginHandler, User Data:");
-    console.log(req.body);
 
     try {
-        User.findOne({ "userName": req.body.loginData.userName, "password": req.body.loginData.userPass })
+        if (!req.body.loginData) {
+            return res.status(400).json({ message: "Invalid loginData Object" });
+        }
+
+        User.findOne({ "userName": req.body.loginData.userName })
             .exec(function (err, user) {
                 if (!user) {
                     console.log("User not found");
-                    return res.status(404).json({ message: "Invalid User or Password" });
+                    return res.status(404).json({ message: "User Not Found" });
                 }
                 if (user.isDeleted) {
                     console.log("User account deleted, please talk to your administrator");
                     return res.status(403).json({ message: "User account deleted" });
                 }
 
-               
-                //Add Auth/JWT token code here in next sprint
-                // let passwordMatch = authService.comparePasswords(newUser.password, user.password);
-                // if (passwordMatch) {
-                //     let token = authService.signUser(user); // <--- Uses the authService to create jwt token
-                //     res.cookie('jwt', token); // <--- Adds token to response as a cookie
-                // } else {
-                //     console.log('Wrong password');
+                if (user) {
+                    let passwordMatch = authService.comparePasswords(req.body.loginData.userPass , user.password);
+                    if (passwordMatch) {
 
-                // }
+                      let token = authService.signUser(user); // <--- Uses the authService to create jwt token
+                      //console.log(user.userName + " was found!");
+                      return res.status(200).json({ "Bearer ": token });
 
-                console.log(user.userName + " was found!");
-                return res.status(200).json(
-                    {
-                        message: "User Found",
-                        userName: user.userName,
-                        firstName: user.firstName
-                    });
+                    } else {
+                      console.log('Invalid Password');
+                      return res.status(404).json({ message: "Invalid Password" });
+                    }
+                  }
+
 
             });
 

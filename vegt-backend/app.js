@@ -30,22 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());  //enables VeggieTender Clients to access server
 
 
-//Determine where to use for future token auth
-//app.use(async (req, res, next) => {
-
-    // //Pull token from request
-    // const header = req.headers.authorization;
-    // if (!header) {
-    //     return next();
-    // }
-    // const token = header.split(' ')[1];
-    // //validate token / get the user
-    // const user = await auth.verifyUser(token);
-    // req.user = user;
-   // next();
-//});
-
-
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);  //will be using this route for VeggieTender API's
 
