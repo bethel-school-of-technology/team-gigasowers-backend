@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors'); 
 
+
 const dotenv = require('dotenv');  //loads VeggieTender config file
 dotenv.config({ path: './config/config.env' });
 
@@ -23,9 +24,10 @@ connectDB();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(cors());  //enables VeggieTender Clients to access server
 

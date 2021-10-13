@@ -1,5 +1,4 @@
 const User = require('../models/user');
-const profileFilter = require('./profileFilter');
 const authService = require('../services/auth');
 
 
@@ -8,31 +7,15 @@ const authService = require('../services/auth');
 ----------------------------------------------------------------*/
 const profileHandler = (req, res, next) => {
 
-    /*
-        1) Handler will use the extracted user id from token to do the findById and update
-        2) An additional property can be passed called "profileSection" to request a 
-        result set to return. Values can be: "USER", "FARM", "ALL".  Empty string will 
-        return just the res.status code
-        
-            { "profileData": {
-                    "profileSection": "", 
-                    etc...
-                } 
-            }
-    */
-
     //User was extracted from token and passed in via req.user property in order to findById()
     const _id = req.user._id;
-    let returnProfileRequested = "";
+
 
     //get user object from database before updating with incoming data
     try {
 
-        if (!req.body.profileData) {
-            return res.status(400).json({ message: "Invalid profileData Object" });
-        }
-        if (req.body.profileData.profileSection) {
-            returnProfileRequested = req.body.profileData.profileSection;
+        if (!req.body) {
+            return res.status(400).json({ message: "Invalid Object" });
         }
 
         User.findOne({ "_id": _id },)
@@ -46,8 +29,8 @@ const profileHandler = (req, res, next) => {
                     return res.status(403).json({ message: "User account deleted" });
                 }
 
-                //process received req.body.profileData into found user Object
-                loadProfileData(foundObject);
+                //process received req.body into found user Object
+                loadForUpdate(foundObject);
 
                 //save to the database will return an updated object
                 foundObject.save(function (err, updatedObject) {
@@ -56,27 +39,8 @@ const profileHandler = (req, res, next) => {
                         res.status(500).send({ "message": err });
                     }
                     if (updatedObject) {
-
-                        switch (returnProfileRequested) {
-                            case "ALL":
-                                return res.status(200).send(updatedObject);
-                                break;
-
-                            case "":
-                                return res.status(200).send();
-                                break;
-
-                            default:
-                                //filter and return result based on profileSection property received
-                                const returnObj = profileFilter(returnProfileRequested, updatedObject);
-                                console.log("Sending returnObj: ");
-                                console.log(returnObj);
-                                return res.status(200).send(returnObj);
-
-                        };
-
+                        return res.status(200).send();
                     }
-
                 });
 
 
@@ -88,124 +52,118 @@ const profileHandler = (req, res, next) => {
 
 
     //Load found object user properties with received data
-    loadProfileData = (foundObject) => {
+    loadForUpdate = (foundObject) => {
 
-        if (req.body.profileData._id) {
-            foundObject._id = req.body.profileData._id;
+        if (req.body.firstName) {
+            foundObject.firstName = req.body.firstName;
         };
-        if (req.body.profileData.firstName) {
-            foundObject.firstName = req.body.profileData.firstName;
+        if (req.body.lastName) {
+            foundObject.lastName = req.body.lastName;
         };
-        if (req.body.profileData.lastName) {
-            foundObject.lastName = req.body.profileData.lastName;
+        if (req.body.email) {
+            foundObject.email = req.body.email;
         };
-        if (req.body.profileData.email) {
-            foundObject.email = req.body.profileData.email;
+        if (req.body.userName) {
+            foundObject.userName = req.body.userName;
         };
-        if (req.body.profileData.userName) {
-            foundObject.userName = req.body.profileData.userName;
+        if (req.body.password) {
+            foundObject.password = authService.hashPassword(req.body.password);
         };
-        if (req.body.profileData.password) {
-            foundObject.password = authService.hashPassword(req.body.profileData.password);
+        if (req.body.address) {
+            foundObject.address = req.body.address;
         };
-        if (req.body.profileData.address) {
-            foundObject.address = req.body.profileData.address;
+        if (req.body.city) {
+            foundObject.city = req.body.city;
         };
-        if (req.body.profileData.city) {
-            foundObject.city = req.body.profileData.city;
+        if (req.body.state) {
+            foundObject.state = req.body.state;
         };
-        if (req.body.profileData.state) {
-            foundObject.state = req.body.profileData.state;
+        if (req.body.zip) {
+            foundObject.zip = req.body.zip;
         };
-        if (req.body.profileData.zip) {
-            foundObject.zip = req.body.profileData.zip;
+        if (req.body.isAdmin) {
+            foundObject.isAdmin = req.body.isAdmin;
         };
-        if (req.body.profileData.isAdmin) {
-            foundObject.isAdmin = req.body.profileData.isAdmin;
+        if (req.body.isFarmer) {
+            foundObject.isFarmer = req.body.isFarmer;
         };
-        if (req.body.profileData.isFarmer) {
-            foundObject.isFarmer = req.body.profileData.isFarmer;
+        if (req.body.likedFarms) {
+            foundObject.likedFarms = JSON.parse(JSON.stringify(req.body.likedFarms));
         };
-        if (req.body.profileData.likedFarms) {
-            foundObject.likedFarms = JSON.parse(JSON.stringify(req.body.profileData.likedFarms));
+        if (req.body.isDeleted) {
+            foundObject.isDeleted = req.body.isDeleted;
         };
-        if (req.body.profileData.isDeleted) {
-            foundObject.isDeleted = req.body.profileData.isDeleted;
+        if (req.body.farmId) {
+            foundObject.userFarms.farmId = req.body.farmId;
         };
-        if (req.body.profileData.userFarms.farmId) {
-            foundObject.userFarms.farmId = req.body.profileData.userFarms.farmId;
+        if (req.body.farmName) {
+            foundObject.userFarms.farmName = req.body.farmName;
         };
-        if (req.body.profileData.userFarms.farmName) {
-            foundObject.userFarms.farmName = req.body.profileData.userFarms.farmName;
+        if (req.body.farmDescription) {
+            foundObject.userFarms.farmDescription = req.body.farmDescription;
         };
-        if (req.body.profileData.userFarms.farmDescription) {
-            foundObject.userFarms.farmDescription = req.body.profileData.userFarms.farmDescription;
+        if (req.body.farmAddress) {
+            foundObject.userFarms.farmAddress = req.body.farmAddress;
         };
-        if (req.body.profileData.userFarms.farmAddress) {
-            foundObject.userFarms.farmAddress = req.body.profileData.userFarms.farmAddress;
+        if (req.body.farmCity) {
+            foundObject.userFarms.farmCity = req.body.farmCity;
         };
-        if (req.body.profileData.userFarms.farmCity) {
-            foundObject.userFarms.farmCity = req.body.profileData.userFarms.farmCity;
+        if (req.body.farmState) {
+            foundObject.userFarms.farmState = req.body.farmState;
         };
-        if (req.body.profileData.userFarms.farmState) {
-            foundObject.userFarms.farmState = req.body.profileData.userFarms.farmState;
+        if (req.body.farmZip) {
+            foundObject.userFarms.farmZip = req.body.farmZip;
         };
-        if (req.body.profileData.userFarms.farmZip) {
-            foundObject.userFarms.farmZip = req.body.profileData.userFarms.farmZip;
+        if (req.body.farmImage) {
+            foundObject.userFarms.farmImage = req.body.farmImage;
         };
-        if (req.body.profileData.userFarms.farmImage) {
-            foundObject.userFarms.farmImage = req.body.profileData.userFarms.farmImage;
+        if (req.body.farmWebsite) {
+            foundObject.userFarms.farmWebsite = req.body.farmWebsite;
         };
-        if (req.body.profileData.userFarms.farmWebsite) {
-            foundObject.userFarms.farmWebsite = req.body.profileData.userFarms.farmWebsite;
+        if (req.body.farmEmail) {
+            foundObject.userFarms.farmEmail = req.body.farmEmail;
         };
-        if (req.body.profileData.userFarms.farmEmail) {
-            foundObject.userFarms.farmEmail = req.body.profileData.userFarms.farmEmail;
-        };
-        if (req.body.profileData.userFarms.farmEmail) {
-            foundObject.userFarms.farmEmail = req.body.profileData.userFarms.farmEmail;
-        };
-        // if (req.body.profileData.userFarms.farmInventory.productId) {
-        //     foundObject.userFarms.farmInventory.productId = req.body.profileData.userFarms.farmInventory.productId;
+        // if (req.body.userFarms?.farmInventory?.productId) {
+        //     foundObject.userFarms.farmInventory.productId = req.body.userFarms.farmInventory.productId;
         // };
-        // if (req.body.profileData.userFarms.farmInventory.productCategory) {
-        //     foundObject.userFarms.farmInventory.productCategory = req.body.profileData.userFarms.farmInventory.productCategory;
+        // if (req.body.userFarms?.farmInventory?.productCategory) {
+        //     foundObject.userFarms?.farmInventory.productCategory = req.body.userFarms.farmInventory.productCategory;
         // };
-        // if (req.body.profileData.userFarms.farmInventory.productName) {
-        //     foundObject.userFarms.farmInventory.productName = req.body.profileData.userFarms.farmInventory.productName;
+        // if (req.body.userFarms?.farmInventory?.productName) {
+        //     foundObject.userFarms.farmInventory.productName = req.body.userFarms.farmInventory.productName;
         // };
-        // if (req.body.profileData.userFarms.farmInventory.productDescription) {
-        //     foundObject.userFarms.farmInventory.productDescription = req.body.profileData.userFarms.farmInventory.productDescription;
+        // if (req.body.userFarms?.farmInventory?.productDescription) {
+        //     foundObject.userFarms.farmInventory.productDescription = req.body.userFarms.farmInventory.productDescription;
         // };
-        // if (req.body.profileData.userFarms.farmInventory.productQty) {
-        //     foundObject.userFarms.farmInventory.productQty = req.body.profileData.userFarms.farmInventory.productQty;
+        // if (req.body.userFarms?.farmInventory?.productQty) {
+        //     foundObject.userFarms.farmInventory.productQty = req.body.userFarms.farmInventory.productQty;
         // };
-        // if (req.body.profileData.userFarms.farmInventory.productUnitPrice) {
-        //     foundObject.userFarms.farmInventory.productUnitPrice = req.body.profileData.userFarms.farmInventory.productUnitPrice;
+        // if (req.body.userFarms?.farmInventory?.productUnitPrice) {
+        //     foundObject.userFarms.farmInventory.productUnitPrice = req.body.userFarms.farmInventory.productUnitPrice;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventId) {
-        //     foundObject.userFarms.farmEvent.eventId = req.body.profileData.userFarms.farmEvent.eventId;
+        // if (req.body.userFarms?.farmEvent?.eventId) {
+        //     foundObject.userFarms.farmEvent.eventId = req.body.userFarms.farmEvent.eventId;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventName) {
-        //     foundObject.userFarms.farmEvent.eventName = req.body.profileData.userFarms.farmEvent.eventName;
+        // if (req.body.userFarms?.farmEvent?.eventName) {
+        //     foundObject.userFarms?.farmEvent?.eventName = req.body.userFarms.farmEvent.eventName;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventAddress) {
-        //     foundObject.userFarms.farmEvent.eventAddress = req.body.profileData.userFarms.farmEvent.eventAddress;
+        // if (req.body.userFarms?.farmEvent?.eventAddress) {
+        //     foundObject.userFarms.farmEvent.eventAddress = req.body.userFarms.farmEvent.eventAddress;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventCity) {
-        //     foundObject.userFarms.farmEvent.eventCity = req.body.profileData.userFarms.farmEvent.eventCity;
+        // if (req.body.userFarms?.farmEvent?.eventCity) {
+        //     foundObject.userFarms.farmEvent.eventCity = req.body.userFarms.farmEvent.eventCity;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventState) {
-        //     foundObject.userFarms.farmEvent.eventState = req.body.profileData.userFarms.farmEvent.eventState;
+        // if (req.body.userFarms?.farmEvent?.eventState) {
+        //     foundObject.userFarms.farmEvent.eventState = req.body.userFarms.farmEvent.eventState;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventZip) {
-        //     foundObject.userFarms.farmEvent.eventZip = req.body.profileData.userFarms.farmEvent.eventZip;
+        // if (req.body.userFarms?.farmEvent?.eventZip) {
+        //     foundObject.userFarms.farmEvent.eventZip = req.body.userFarms.farmEvent.eventZip;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventStartDate) {
-        //     foundObject.userFarms.farmEvent.eventStartDate = req.body.profileData.userFarms.farmEvent.eventStartDate;
+        // if (req.body.userFarms?.farmEvent?.eventStartDate) {
+        //     foundObject.userFarms.farmEvent.eventStartDate = req.body.userFarms.farmEvent.eventStartDate;
         // };
-        // if (req.body.profileData.userFarms.farmEvent.eventFinishDate) {
-        //     foundObject.userFarms.farmEvent.eventFinishDate = req.body.profileData.userFarms.farmEvent.eventFinishDate;
+        // if (req.body.userFarms?.farmEvent?.eventFinishDate) {
+        //     foundObject.userFarms.farmEvent.eventFinishDate = req.body.userFarms.farmEvent.eventFinishDate;
         // };
 
         return foundObject;

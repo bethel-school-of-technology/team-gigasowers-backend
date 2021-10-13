@@ -9,13 +9,12 @@ const getProfileHandler = (req, res, next) => {
     /*---------------------------------------------------------- 
         1) Handler will findById which was extracted from token and set to req.user property 
 
-        2) If "profileSection" is passed in the profileData obj, then route will return filtered user data as requested
+        2) If "profileSection" is passed in, then route will return filtered user data as requested
         profileSection values can be: "USER", "FARM", "ALL". 
         If no value is entered or the property is missing, GET route will default 
         to "ALL" information about the user
-            { "profileData": {
-                    "profileSection": "USER"
-                } 
+            { 
+                    "profileSection": "USER" 
             }
     */
 
@@ -43,11 +42,10 @@ const getProfileHandler = (req, res, next) => {
         return;
     };
 
-    //if profileData object is sent then check for profile section 
-    if (req.body.profileData) {
-        profileSection = req.body.profileData.profileSection;
-    } 
-
+    // Check for profile section and load if passed in 
+    if (req.body.profileSection) {
+        profileSection = req.body.profileSection;
+    };
    
     //load the projections
     loadProjections();
@@ -64,8 +62,7 @@ const getProfileHandler = (req, res, next) => {
                     console.log("User account deleted, please talk to your administrator");
                     return res.status(403).json({ message: "User account deleted" });
                 }
-                //console.log("foundObject: ");
-                //console.log(foundObject);
+ 
                 res.status(200).send(foundObject);
 
             });
@@ -73,7 +70,6 @@ const getProfileHandler = (req, res, next) => {
     } catch (err) {
         console.error(err);
     };
-
 
 };
 
