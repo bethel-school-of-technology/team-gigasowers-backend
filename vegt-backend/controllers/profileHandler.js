@@ -39,7 +39,7 @@ const profileHandler = (req, res, next) => {
                         res.status(500).send({ "message": err });
                     }
                     if (updatedObject) {
-                        return res.status(200);
+                        return res.status(200).send();
                     }
                 });
 

@@ -67,7 +67,7 @@ const userRegHandler = async (req, res, next) => {
         //save to database and get result object returned
         let result = await newUser.save();
         if (result) {
-            return res.status(200);
+            return res.status(200).send();
 
         } else {
             return res.status(500).json({ message: "error saving user to database" });
