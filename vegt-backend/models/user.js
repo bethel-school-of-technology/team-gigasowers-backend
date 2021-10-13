@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    address: { type: String },
+    city: { type: String },
+    state: { type: String },
+    zip: { type: String },
     isAdmin: {
         type: Boolean,
         default: false
@@ -38,42 +42,40 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    userFarms: [
+    userFarms:
+    {
+        farmId: { type: String },
+        farmName: { type: String },
+        farmDescription: { type: String },
+        farmAddress: { type: String },
+        farmCity: { type: String },
+        farmState: { type: String },
+        farmZip: { type: String },
+        farmImage: { type: String },
+        farmWebsite: { type: String },
+        farmEmail: { type: String },
+        farmInventory:
         {
-            farmId: { type: String },
-            farmName: { type: String },
-            farmDescription: { type: String },
-            farmAddress: { type: String },
-            farmCity: { type: String },
-            farmState: { type: String },
-            farmZip: { type: String },
-            farmImage: { type: String },
-            farmWebsite: { type: String },
-            farmEmail: { type: String },
-            farmInventory: [
-                {
-                    productId: { type: String },
-                    productCategory: { type: String },
-                    productName: { type: String },
-                    productDescription: { type: String },
-                    productQty:  { type: Number },
-                    productUnitPrice: { type: Number }
-                }
-            ],
-            farmEvents: [
-                {
-                    eventId: { type: String },
-                    eventName: { type: String },
-                    eventAddress: { type: String },
-                    eventCity: { type: String },
-                    eventState: { type: String },
-                    eventZip: { type: String },
-                    eventStartDate:  { type: String },
-                    eventFinishDate: { type: String }
-                }
-            ]    
+            productId: { type: String },
+            productCategory: { type: String },
+            productName: { type: String },
+            productDescription: { type: String },
+            productQty: { type: Number },
+            productUnitPrice: { type: Number }
+        },
+        farmEvent:
+        {
+            eventId: { type: String },
+            eventName: { type: String },
+            eventAddress: { type: String },
+            eventCity: { type: String },
+            eventState: { type: String },
+            eventZip: { type: String },
+            eventStartDate: { type: String },
+            eventFinishDate: { type: String }
         }
-    ],
+
+    },
     isDeleted: {
         type: Boolean,
         default: false
