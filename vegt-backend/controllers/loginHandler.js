@@ -2,14 +2,14 @@ const User = require('../models/user');
 const authService = require('../services/auth');
 
 const loginHandler = (req, res, next) => {
-
+    
 
     try {
-        if (!req.body.loginData) {
+        if (!req.body) {
             return res.status(400).json({ message: "Invalid loginData Object" });
         }
 
-        User.findOne({ "userName": req.body.loginData.userName })
+        User.findOne({ "userName": req.body.userName })
             .exec(function (err, user) {
                 if (!user) {
                     console.log("User not found");
@@ -21,7 +21,7 @@ const loginHandler = (req, res, next) => {
                 }
 
                 if (user) {
-                    let passwordMatch = authService.comparePasswords(req.body.loginData.userPass , user.password);
+                    let passwordMatch = authService.comparePasswords(req.body.userPass , user.password);
                     if (passwordMatch) {
 
                       let token = authService.signUser(user); // <--- Uses the authService to create jwt token
