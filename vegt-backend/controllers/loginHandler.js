@@ -26,7 +26,7 @@ const loginHandler = (req, res, next) => {
 
                       let token = authService.signUser(user); // <--- Uses the authService to create jwt token
                       //console.log(user.userName + " was found!");
-                      return res.status(200).json({ "Bearer ": token });
+                      return res.status(200).json({ "jwt": token });
 
                     } else {
                       console.log('Invalid Password');
