@@ -65,19 +65,19 @@ const userSchema = new mongoose.Schema({
                 productImage: { type: String }
             }
         ],
-        farmEvent:
-        {
-            eventId: { type: String },
-            eventName: { type: String },
-            eventAddress: { type: String },
-            eventCity: { type: String },
-            eventState: { type: String },
-            eventZip: { type: String },
-            eventStartDate: { type: String },
-            eventFinishDate: { type: String },
-            eventImage: { type: String }
-        }
-
+        farmEvent: [
+            {
+                eventId: { type: String },
+                eventName: { type: String },
+                eventAddress: { type: String },
+                eventCity: { type: String },
+                eventState: { type: String },
+                eventZip: { type: String },
+                eventStartDate: { type: String },
+                eventFinishDate: { type: String },
+                eventImage: { type: String }
+            }
+        ],
     },
     isDeleted: {
         type: Boolean,
