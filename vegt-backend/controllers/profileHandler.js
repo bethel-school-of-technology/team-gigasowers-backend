@@ -18,7 +18,7 @@ const profileHandler = (req, res, next) => {
             return res.status(400).json({ message: "Invalid Object" });
         }
 
-        User.findOne({ "_id": _id },)
+        User.findOne({ "_id": _id })
             .exec(function (err, foundObject) {
                 if (!foundObject) {
                     console.log("User not found");
@@ -123,24 +123,23 @@ const profileHandler = (req, res, next) => {
         if (req.body.farmEmail) {
             foundObject.userFarms.farmEmail = req.body.farmEmail;
         };
-        // if (req.body.userFarms?.farmInventory?.productId) {
-        //     foundObject.userFarms.farmInventory.productId = req.body.userFarms.farmInventory.productId;
-        // };
-        // if (req.body.userFarms?.farmInventory?.productCategory) {
-        //     foundObject.userFarms?.farmInventory.productCategory = req.body.userFarms.farmInventory.productCategory;
-        // };
-        // if (req.body.userFarms?.farmInventory?.productName) {
-        //     foundObject.userFarms.farmInventory.productName = req.body.userFarms.farmInventory.productName;
-        // };
-        // if (req.body.userFarms?.farmInventory?.productDescription) {
-        //     foundObject.userFarms.farmInventory.productDescription = req.body.userFarms.farmInventory.productDescription;
-        // };
-        // if (req.body.userFarms?.farmInventory?.productQty) {
-        //     foundObject.userFarms.farmInventory.productQty = req.body.userFarms.farmInventory.productQty;
-        // };
-        // if (req.body.userFarms?.farmInventory?.productUnitPrice) {
-        //     foundObject.userFarms.farmInventory.productUnitPrice = req.body.userFarms.farmInventory.productUnitPrice;
-        // };
+        if (req.body.hasOwnProperty('farmInventory')) {
+            let fInv = req.body.farmInventory;
+            for (let i = 0; i < fInv.length; i++) {
+                foundObject.userFarms.farmInventory[i] = {
+                    ...foundObject.userFarms.farmInventory[i],
+                    'productId': fInv[i].productId,
+                    'productCategory': fInv[i].productCategory,
+                    'productName': fInv[i].productName,
+                    'productDescription': fInv[i].productDescription,
+                    'productQty': fInv[i].productQty,
+                    'productUnitPrice': fInv[i].productUnitPrice,
+                    'productImage': fInv[i].productImage
+                };
+            };
+        };
+
+
         // if (req.body.userFarms?.farmEvent?.eventId) {
         //     foundObject.userFarms.farmEvent.eventId = req.body.userFarms.farmEvent.eventId;
         // };
@@ -164,6 +163,9 @@ const profileHandler = (req, res, next) => {
         // };
         // if (req.body.userFarms?.farmEvent?.eventFinishDate) {
         //     foundObject.userFarms.farmEvent.eventFinishDate = req.body.userFarms.farmEvent.eventFinishDate;
+        // };
+        // if (req.body.userFarms?.farmEvent?.eventImage) {
+        //     foundObject.userFarms.farmEvent.eventImage = req.body.userFarms.farmEvent.eventImage;
         // };
 
         return foundObject;

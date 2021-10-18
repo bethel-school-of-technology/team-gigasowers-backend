@@ -54,15 +54,17 @@ const userSchema = new mongoose.Schema({
         farmImage: { type: String },
         farmWebsite: { type: String },
         farmEmail: { type: String },
-        farmInventory:
-        {
-            productId: { type: String },
-            productCategory: { type: String },
-            productName: { type: String },
-            productDescription: { type: String },
-            productQty: { type: Number },
-            productUnitPrice: { type: Number }
-        },
+        farmInventory: [
+            {
+                productId: { type: String },
+                productCategory: { type: String },
+                productName: { type: String },
+                productDescription: { type: String },
+                productQty: { type: Number },
+                productUnitPrice: { type: Number },
+                productImage: { type: String }
+            }
+        ],
         farmEvent:
         {
             eventId: { type: String },
@@ -72,7 +74,8 @@ const userSchema = new mongoose.Schema({
             eventState: { type: String },
             eventZip: { type: String },
             eventStartDate: { type: String },
-            eventFinishDate: { type: String }
+            eventFinishDate: { type: String },
+            eventImage: { type: String }
         }
 
     },
