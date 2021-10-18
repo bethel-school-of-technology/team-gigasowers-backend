@@ -138,39 +138,27 @@ const profileHandler = (req, res, next) => {
                 };
             };
         };
-
-
-        // if (req.body.userFarms?.farmEvent?.eventId) {
-        //     foundObject.userFarms.farmEvent.eventId = req.body.userFarms.farmEvent.eventId;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventName) {
-        //     foundObject.userFarms?.farmEvent?.eventName = req.body.userFarms.farmEvent.eventName;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventAddress) {
-        //     foundObject.userFarms.farmEvent.eventAddress = req.body.userFarms.farmEvent.eventAddress;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventCity) {
-        //     foundObject.userFarms.farmEvent.eventCity = req.body.userFarms.farmEvent.eventCity;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventState) {
-        //     foundObject.userFarms.farmEvent.eventState = req.body.userFarms.farmEvent.eventState;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventZip) {
-        //     foundObject.userFarms.farmEvent.eventZip = req.body.userFarms.farmEvent.eventZip;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventStartDate) {
-        //     foundObject.userFarms.farmEvent.eventStartDate = req.body.userFarms.farmEvent.eventStartDate;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventFinishDate) {
-        //     foundObject.userFarms.farmEvent.eventFinishDate = req.body.userFarms.farmEvent.eventFinishDate;
-        // };
-        // if (req.body.userFarms?.farmEvent?.eventImage) {
-        //     foundObject.userFarms.farmEvent.eventImage = req.body.userFarms.farmEvent.eventImage;
-        // };
+        if (req.body.hasOwnProperty('farmEvent')) {
+            let fEvent = req.body.farmEvent;
+            for (let i = 0; i < fEvent.length; i++) {
+                foundObject.userFarms.farmEvent[i] = {
+                    ...foundObject.userFarms.farmEvent[i],
+                    'eventId': fEvent[i].eventId,
+                    'eventName': fEvent[i].eventName,
+                    'eventAddress': fEvent[i].eventAddress,
+                    'eventCity': fEvent[i].eventCity,
+                    'eventState': fEvent[i].eventState,
+                    'eventZip': fEvent[i].eventZip,
+                    'eventStartDate': fEvent[i].eventStartDate,
+                    'eventFinishDate': fEvent[i].eventFinishDate,
+                    'eventImage': fEvent[i].eventImage
+                };
+            };
+        };
 
         return foundObject;
     };
 
-}
+};
 
 module.exports = profileHandler;

@@ -40,26 +40,30 @@ const userRegHandler = async (req, res, next) => {
                 farmImage: "",
                 farmWebsite: "",
                 farmEmail: "",
-                farmInventory:
-                {
-                    productId: "",
-                    productCategory: "",
-                    productName: "",
-                    productDescription: "",
-                    productQty: 0,
-                    productUnitPrice: 0
-                },
-                farmEvent:
-                {
-                    eventId: "",
-                    eventName: "",
-                    eventAddress: "",
-                    eventCity: "",
-                    eventState: "",
-                    eventZip: "",
-                    eventStartDate: "",
-                    eventFinishDate: ""
-                }
+                farmInventory: [
+                    {
+                        productId: "",
+                        productCategory: "",
+                        productName: "",
+                        productDescription: "",
+                        productQty: 0,
+                        productUnitPrice: 0,
+                        productImage: ""
+                    }
+                ],
+                farmEvent: [
+                    {
+                        eventId: "",
+                        eventName: "",
+                        eventAddress: "",
+                        eventCity: "",
+                        eventState: "",
+                        eventZip: "",
+                        eventStartDate: "",
+                        eventFinishDate: "",
+                        eventImage: ""
+                    }
+                ]
             }
 
         });
