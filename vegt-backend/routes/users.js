@@ -64,19 +64,27 @@ router.put('/update', async (req, res, next) => {
         return res.status(401).json({ message: "No Authorized Token Available" });
     };
 
-    //verifyUser is logged in
-    let user = await authService.verifyUser(token);
-    if (!user) {
-        return res.status(401).json({ message: "Must be logged in" });
-    };
+    try {
+        //verifyUser is logged in
+        let user = await authService.verifyUser(token);
+        if (!user) {
+            return res.status(401).json({ message: "Must be logged in" });
+        };
 
-    //verify user is not classified as deleted
-    if (user.isDeleted) {
-        return res.status(403).json({ message: "User account deleted" });
-    };
+        //verify user is not classified as deleted
+        if (user.isDeleted) {
+            return res.status(403).json({ message: "User account deleted" });
+        };
 
-    req.user = user;  //Add valid user from the token to the req.user property
-    profileHandler(req, res, next);  //call profile handler 
+        req.user = user;  //Add valid user from the token to the req.user property
+        profileHandler(req, res, next);  //call profile handler 
+        
+    } catch (err) {
+        console.log("users route: " + err);
+        return null;
+    }
+
+
 
 });
 
@@ -93,19 +101,27 @@ router.get('/profile', async (req, res, next) => {
         return res.status(401).json({ message: "No Authorized Token Available" });
     };
 
-    //verifyUser is logged in
-    let user = await authService.verifyUser(token);
-    if (!user) {
-        return res.status(401).json({ message: "Must be logged in" });
-    };
+    try {
+        //verifyUser is logged in
+        let user = await authService.verifyUser(token)
+        if (!user) {
+            return res.status(401).json({ message: "Must be logged in" });
+        };
 
-    //verify user is not classified as deleted
-    if (user.isDeleted) {
-        return res.status(403).json({ message: "User account deleted" });
-    };
+        //verify user is not classified as deleted
+        if (user.isDeleted) {
+            return res.status(403).json({ message: "User account deleted" });
+        };
 
-    req.user = user;  //Add valid user from the token to the req.user property
-    getProfileHandler(req, res, next);
+        req.user = user;  //Add valid user from the token to the req.user property
+        getProfileHandler(req, res, next);
+
+    } catch (err) {
+        console.log("users route: " + err);
+        return null;
+    }
+
+
 
 });
 

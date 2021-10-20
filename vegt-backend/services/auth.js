@@ -21,8 +21,7 @@ var authService = {
     try {
       let decoded = jwt.verify(token, 'veggieTales');
       return User.findById(decoded.userId);
-    } catch (err) {
-      console.log(err);
+    } catch (err) {    
       return null;
     }
   },
