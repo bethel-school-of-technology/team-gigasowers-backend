@@ -61,19 +61,19 @@ router.put('/update', async (req, res, next) => {
     let token = getToken(req);
 
     if (!token) {
-        return res.status(401).json({ message: "No Authorized Token Available" });
+        return res.status(401).send("No Authorized Token Available");
     };
 
     try {
         //verifyUser is logged in
         let user = await authService.verifyUser(token);
         if (!user) {
-            return res.status(401).json({ message: "Must be logged in" });
+            return res.status(401).send("Must be logged in");
         };
 
         //verify user is not classified as deleted
         if (user.isDeleted) {
-            return res.status(403).json({ message: "User account deleted" });
+            return res.status(403).send("User account deleted");
         };
 
         req.user = user;  //Add valid user from the token to the req.user property
@@ -98,19 +98,19 @@ router.get('/profile', async (req, res, next) => {
     let token = getToken(req);
 
     if (!token) {
-        return res.status(401).json({ message: "No Authorized Token Available" });
+        return res.status(401).send({ message: "No Authorized Token Available" });
     };
 
     try {
         //verifyUser is logged in
         let user = await authService.verifyUser(token)
         if (!user) {
-            return res.status(401).json({ message: "Must be logged in" });
+            return res.status(401).send({ message: "Must be logged in" });
         };
 
         //verify user is not classified as deleted
         if (user.isDeleted) {
-            return res.status(403).json({ message: "User account deleted" });
+            return res.status(403).send({ message: "User account deleted" });
         };
 
         req.user = user;  //Add valid user from the token to the req.user property
