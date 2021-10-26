@@ -55,7 +55,6 @@ const productHandler = (req, res, next) => {
                     });
 
                 } else {
-                    console.log(foundObject);
                     res.status(404).send(`Product Not found, Prouct Update Not Successful`);
                 }
             });

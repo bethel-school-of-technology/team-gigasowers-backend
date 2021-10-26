@@ -30,7 +30,7 @@ const userRegHandler = async (req, res, next) => {
             ],
             userFarms:
             {
-                farmId: "",
+                farmId: "1",
                 farmName: "",
                 farmDescription: "",
                 farmAddress: "",
@@ -41,28 +41,28 @@ const userRegHandler = async (req, res, next) => {
                 farmWebsite: "",
                 farmEmail: "",
                 farmInventory: [
-                    {
-                        productId: "",
-                        productCategory: "",
-                        productName: "",
-                        productDescription: "",
-                        productQty: 0,
-                        productUnitPrice: 0,
-                        productImage: ""
-                    }
+                    // {
+                    //     productId: "",
+                    //     productCategory: "",
+                    //     productName: "",
+                    //     productDescription: "",
+                    //     productQty: 0,
+                    //     productUnitPrice: 0,
+                    //     productImage: ""
+                    // }
                 ],
                 farmEvent: [
-                    {
-                        eventId: "",
-                        eventName: "",
-                        eventAddress: "",
-                        eventCity: "",
-                        eventState: "",
-                        eventZip: "",
-                        eventStartDate: "",
-                        eventFinishDate: "",
-                        eventImage: ""
-                    }
+                    // {
+                    //     eventId: "",
+                    //     eventName: "",
+                    //     eventAddress: "",
+                    //     eventCity: "",
+                    //     eventState: "",
+                    //     eventZip: "",
+                    //     eventStartDate: "",
+                    //     eventFinishDate: "",
+                    //     eventImage: ""
+                    // }
                 ]
             }
 
